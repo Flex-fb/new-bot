@@ -1,6 +1,6 @@
 import os
 import logging
-from telegram import Update, ChatPermissions
+from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
@@ -17,27 +17,25 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user is None or text is None:
         return
 
-    first_name = user.first_name or ""
+    name = user.first_name or ""
     username = user.username or "неизвестно"
     user_id = user.id
     date = update.message.date.strftime("%Y-%m-%d %H:%M:%S")
 
-    card = (
-        f"<b>Новое сообщение от клиента</b>\n"
-        f"<b>Имя:</b> {first_name}\n"
+    message = (
+        "<b>💬 Новое сообщение от клиента</b>\n\n"
+        f"<b>Имя:</b> {name}\n"
         f"<b>Username:</b> @{username}\n"
-        f"<b>ID:</b> <code>{user_id}</code>\n"
+        f"<b>Telegram ID:</b> <code>{user_id}</code>\n"
         f"<b>Время:</b> {date}\n"
         f"<b>Сообщение:</b> {text}"
     )
 
-    # Пересылаем владельцу в личку
     try:
-        await context.bot.send_message(chat_id=ADMIN_ID, text=card, parse_mode="HTML")
+        await context.bot.send_message(chat_id=ADMIN_ID, text=message, parse_mode="HTML")
     except Exception as e:
-        logger.error(f"Ошибка при отправке админу: {e}")
+        logger.error(f"Ошибка отправки админу: {e}")
 
-    # Отвечаем пользователю
     await update.message.reply_text("Привет, сладкий, хочешь расслабиться и получать незабываемые удовольствия?")
 
 if __name__ == "__main__":
