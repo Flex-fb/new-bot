@@ -21,7 +21,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     profile_link = f"<a href='tg://user?id={user_id}'>Профиль</a>"
 
     message = (
-        "<b>Новое сообщение от клиента</b>
+        "<b>Новое сообщение от клиента</b>"
 
 "
         f"👤 Имя: {first_name}
